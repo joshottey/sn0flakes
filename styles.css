@@ -1,0 +1,153 @@
+:root {
+    --primary-blue: #1B262C;
+    --secondary-blue: #0F4C75;
+    --accent-blue: #3282B8;
+    --light-blue: #BBE1FA;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background-color: var(--primary-blue);
+    font-family: Arial, sans-serif;
+}
+
+.game-container {
+    position: relative;
+    width: 512px;
+    height: 512px;
+    background-color: var(--secondary-blue);
+    border: 2px solid var(--light-blue);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath fill='%23FF6B6B' d='M18,0 Q24,6 30,0 Q30,12 24,18 Q18,12 18,0'/%3E%3C/svg%3E") 24 0,
+        auto;
+}
+
+#score {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: var(--light-blue);
+    font-size: 1.2rem;
+    font-weight: bold;
+    z-index: 100;
+}
+
+.snowflake {
+    position: absolute;
+    color: white;
+    user-select: none;
+    animation: rotate 8s linear infinite;
+}
+
+.snowflake:hover {
+    transform: scale(1.2);
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.game-wrapper {
+    position: relative;
+}
+
+#timer {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 2rem;
+    color: var(--light-blue);
+}
+
+#overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(27, 38, 44, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#overlay.hidden {
+    display: none;
+}
+
+#overlay h2 {
+    color: var(--light-blue);
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+
+#restart-btn {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#restart-btn:hover {
+    background: var(--light-blue);
+    color: var(--primary-blue);
+}
+
+#game-area {
+    width: 100%;
+    height: 100%;
+}
+
+/* Add clock styles */
+.clock {
+    position: absolute;
+    color: gold;
+    font-size: 24px;
+    cursor: pointer;
+    user-select: none;
+    z-index: 50;
+}
+
+.time-bonus {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: gold;
+    font-size: 2rem;
+    font-weight: bold;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 200;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+}
+
+.time-bonus.show {
+    animation: fadeOut 1.5s ease-out forwards;
+}
