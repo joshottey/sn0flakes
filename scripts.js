@@ -199,3 +199,42 @@ const timerInterval = setInterval(() => {
 restartBtn.addEventListener('click', resetGame);
 
 gameLoop();
+
+// Add to existing event listeners in scripts.js
+document.addEventListener('DOMContentLoaded', () => {
+    // Add touch events to snowflakes
+    snowflakes.forEach(snowflake => {
+        snowflake.element.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            snowflake.catch();
+        });
+    });
+
+    // Add touch events to clock
+    clock.element.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        clock.catch();
+    });
+
+    // Prevent scrolling while playing
+    document.querySelector('.game-container').addEventListener('touchmove', (e) => {
+        e.preventDefault();
+    }, { passive: false });
+});
+
+// Handle orientation changes
+window.addEventListener('resize', () => {
+    // Recalculate positions based on new dimensions
+    const gameWidth = Math.min(window.innerWidth, 512);
+    const gameHeight = Math.min(window.innerHeight, 512);
+    
+    snowflakes.forEach(snowflake => {
+        if (snowflake.x > gameWidth) {
+            snowflake.reset();
+        }
+    });
+    
+    if (clock.active && clock.x > gameWidth) {
+        clock.reset();
+    }
+});

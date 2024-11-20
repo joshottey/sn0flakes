@@ -3,6 +3,8 @@
     --secondary-blue: #0F4C75;
     --accent-blue: #3282B8;
     --light-blue: #BBE1FA;
+    --game-width: min(100vw, 512px);
+    --game-height: min(100vh, 512px);
 }
 
 body {
@@ -12,12 +14,13 @@ body {
     place-items: center;
     background-color: var(--primary-blue);
     font-family: Arial, sans-serif;
+    touch-action: none; /* Prevent default touch behaviors */
 }
 
 .game-container {
     position: relative;
-    width: 512px;
-    height: 512px;
+    width: var(--game-width);
+    height: var(--game-height);
     background-color: var(--secondary-blue);
     border: 2px solid var(--light-blue);
     border-radius: 8px;
@@ -164,4 +167,43 @@ body {
 .game-summary p {
     margin: 0.5rem 0;
     font-size: 1.1rem;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .game-container {
+        width: 100vw;
+        height: 100vh;
+        border: none;
+        border-radius: 0;
+    }
+
+    #timer {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        top: auto;
+        font-size: 1.5rem;
+    }
+
+    #score {
+        top: 20px;
+        right: 20px;
+        font-size: 1.5rem;
+    }
+
+    /* Larger tap targets for mobile */
+    .snowflake, .clock {
+        padding: 10px;
+        margin: -10px;
+    }
+}
+
+/* Touch interactions */
+.snowflake, .clock {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.snowflake:active, .clock:active {
+    transform: scale(1.2);
 }
