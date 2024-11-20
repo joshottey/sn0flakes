@@ -76,6 +76,7 @@ class Clock {
         const bonuses = [2, 5, 10];
         const bonus = bonuses[Math.floor(Math.random() * bonuses.length)];
         timeLeft += bonus;
+        totalBonusTimeCollected += bonus;
         showTimeBonus(bonus);
         this.active = false;
         this.element.style.display = 'none';
@@ -85,6 +86,8 @@ class Clock {
 let score = 0;
 let gameActive = true;
 let timeLeft = 30;
+let totalSnowflakesCaught = 0;
+let totalBonusTimeCollected = 0;
 const scoreElement = document.getElementById('score');
 const gameArea = document.getElementById('game-area');
 const overlay = document.getElementById('overlay');
@@ -94,6 +97,7 @@ const snowflakes = [];
 
 function increaseScore() {
     score++;
+    totalSnowflakesCaught++;
     scoreElement.textContent = `Score: ${score}`;
 }
 
@@ -112,13 +116,34 @@ function updateTimer() {
 function gameOver() {
     gameActive = false;
     overlay.classList.remove('hidden');
+    
+    // Create and display summary
+    const summary = document.createElement('div');
+    summary.className = 'game-summary';
+    summary.innerHTML = `
+        <p>Snowflakes Caught: ${totalSnowflakesCaught}</p>
+        <p>Bonus Time Collected: ${totalBonusTimeCollected}s</p>
+    `;
+    
+    // Insert after game over text, before button
+    const gameOverText = overlay.querySelector('h2');
+    gameOverText.after(summary);
 }
 
 function resetGame() {
     score = 0;
     timeLeft = 30;
     gameActive = true;
+    totalSnowflakesCaught = 0;
+    totalBonusTimeCollected = 0;
     scoreElement.textContent = 'Score: 0';
+    
+    // Remove old summary if exists
+    const oldSummary = overlay.querySelector('.game-summary');
+    if (oldSummary) {
+        oldSummary.remove();
+    }
+    
     overlay.classList.add('hidden');
     snowflakes.forEach(snowflake => snowflake.reset());
 }

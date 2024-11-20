@@ -151,3 +151,17 @@ body {
 .time-bonus.show {
     animation: fadeOut 1.5s ease-out forwards;
 }
+
+.game-summary {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    color: var(--light-blue);
+    text-align: center;
+}
+
+.game-summary p {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+}
