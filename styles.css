@@ -71,6 +71,7 @@ body {
     font-family: 'Share Tech Mono', monospace;
     font-size: 2rem;
     color: var(--light-blue);
+    z-index: 100;
 }
 
 #overlay {
@@ -179,10 +180,8 @@ body {
     }
 
     #timer {
-        position: absolute;
-        bottom: 20px;
+        top: 20px;
         left: 20px;
-        top: auto;
         font-size: 1.5rem;
     }
 
