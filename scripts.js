@@ -146,6 +146,7 @@ function resetGame() {
     
     overlay.classList.add('hidden');
     snowflakes.forEach(snowflake => snowflake.reset());
+    updateSnowPiles();
 }
 
 function showTimeBonus(seconds) {
@@ -220,6 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.game-container').addEventListener('touchmove', (e) => {
         e.preventDefault();
     }, { passive: false });
+
+    updateSnowPiles();
 });
 
 // Handle orientation changes
@@ -238,3 +241,40 @@ window.addEventListener('resize', () => {
         clock.reset();
     }
 });
+
+function generateRandomSnowPile(baseHeight, variability) {
+    const points = [];
+    const numPoints = 6;
+    const width = 512;
+    const step = width / (numPoints - 1);
+    
+    for (let i = 0; i < numPoints; i++) {
+        const x = i * step;
+        const y = baseHeight + (Math.random() * variability);
+        points.push([x, y]);
+    }
+    
+    let path = `M0,100 `;
+    
+    // Generate smooth curve through points
+    for (let i = 0; i < points.length - 1; i++) {
+        const cp1x = points[i][0] + step / 2;
+        const cp1y = points[i][1] + (Math.random() * 10 - 5);
+        const cp2x = points[i + 1][0] - step / 2;
+        const cp2y = points[i + 1][1] + (Math.random() * 10 - 5);
+        path += `C${cp1x},${cp1y} ${cp2x},${cp2y} ${points[i + 1][0]},${points[i + 1][1]} `;
+    }
+    
+    path += `V100 H0 Z`;
+    return path;
+}
+
+function updateSnowPiles() {
+    const paths = document.querySelectorAll('.snow-piles path');
+    if (paths.length === 2) {
+        // Decreased baseHeight from 95 to 65 for taller first pile
+        paths[0].setAttribute('d', generateRandomSnowPile(65, 15));
+        // Decreased baseHeight from 98 to 70 for taller second pile
+        paths[1].setAttribute('d', generateRandomSnowPile(70, 10));
+    }
+}
