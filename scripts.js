@@ -5,7 +5,18 @@ class Snowflake {
         const snowflakes = ['❄', '❅', '❆'];
         this.element.textContent = snowflakes[Math.floor(Math.random() * snowflakes.length)];
         this.reset();
+        
+        // Mouse click
         this.element.addEventListener('click', () => this.catch());
+        
+        // Touch
+        this.element.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (gameActive) {
+                successfulClicks++;
+                this.catch();
+            }
+        });
     }
 
     reset() {
@@ -224,7 +235,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add touch events to clock
     clock.element.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        clock.catch();
+        if (gameActive) {
+            successfulClicks++;
+            clock.catch();
+        }
     });
 
     // Prevent scrolling while playing
@@ -295,3 +309,10 @@ document.querySelector('#game-area').addEventListener('click', () => {
         totalClicks++;
     }
 });
+
+// Add touch handling to game area
+document.querySelector('#game-area').addEventListener('touchstart', (e) => {
+    if (gameActive) {
+        totalClicks++;
+    }
+}, { passive: false });
