@@ -116,9 +116,14 @@ function increaseScore() {
     scoreElement.textContent = `Score: ${score}`;
 }
 
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+}
+
 function updateTimer() {
-    const seconds = timeLeft.toString().padStart(2, '0');
-    timerElement.textContent = `00:${seconds}`;
+    timerElement.textContent = formatTime(timeLeft);
     
     if (timeLeft <= 0) {
         gameOver();
