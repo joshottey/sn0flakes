@@ -233,3 +233,16 @@ body {
 .snowflake, .clock {
     z-index: 2;
 }
+
+/* Add to styles.css */
+.summary-details {
+    margin-top: 0.8rem;
+    border-top: 1px solid rgba(187, 225, 250, 0.2); /* Using light-blue with opacity */
+    padding-top: 0.8rem;
+}
+
+.summary-details p {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin: 0.2rem 0;
+}

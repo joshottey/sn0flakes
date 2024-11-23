@@ -35,6 +35,7 @@ class Snowflake {
         if (!gameActive) return;
         increaseScore();
         this.reset();
+        successfulClicks++;
     }
 }
 
@@ -80,6 +81,7 @@ class Clock {
         showTimeBonus(bonus);
         this.active = false;
         this.element.style.display = 'none';
+        successfulClicks++;
     }
 }
 
@@ -88,6 +90,8 @@ let gameActive = true;
 let timeLeft = 30;
 let totalSnowflakesCaught = 0;
 let totalBonusTimeCollected = 0;
+let totalClicks = 0;
+let successfulClicks = 0;
 const scoreElement = document.getElementById('score');
 const gameArea = document.getElementById('game-area');
 const overlay = document.getElementById('overlay');
@@ -117,15 +121,19 @@ function gameOver() {
     gameActive = false;
     overlay.classList.remove('hidden');
     
-    // Create and display summary
+    const accuracy = totalClicks > 0 ? Math.round((successfulClicks / totalClicks) * 100) : 0;
+    
     const summary = document.createElement('div');
     summary.className = 'game-summary';
     summary.innerHTML = `
         <p>Snowflakes Caught: ${totalSnowflakesCaught}</p>
         <p>Bonus Time Collected: ${totalBonusTimeCollected}s</p>
+        <div class="summary-details">
+            <p>Total Clicks: ${totalClicks}</p>
+            <p>Accuracy: ${accuracy}%</p>
+        </div>
     `;
     
-    // Insert after game over text, before button
     const gameOverText = overlay.querySelector('h2');
     gameOverText.after(summary);
 }
@@ -136,6 +144,8 @@ function resetGame() {
     gameActive = true;
     totalSnowflakesCaught = 0;
     totalBonusTimeCollected = 0;
+    totalClicks = 0;
+    successfulClicks = 0;
     scoreElement.textContent = 'Score: 0';
     
     // Remove old summary if exists
@@ -278,3 +288,10 @@ function updateSnowPiles() {
         paths[1].setAttribute('d', generateRandomSnowPile(70, 10));
     }
 }
+
+// Modify game area click handling
+document.querySelector('#game-area').addEventListener('click', () => {
+    if (gameActive) {
+        totalClicks++;
+    }
+});
