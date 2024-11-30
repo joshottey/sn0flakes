@@ -17,14 +17,20 @@ class Snowflake {
         const snowflakes = ['❄', '❅', '❆'];
         this.element.textContent = snowflakes[Math.floor(Math.random() * snowflakes.length)];
         this.reset();
+
+        // 15% chance to be a yellow decoy snowflake
+        this.isDecoy = Math.random() < 0.15;
+        if (this.isDecoy) {
+            this.element.style.color = 'gold'; // Matches clock color
+        }
         
         // Mouse click
-        this.element.addEventListener('click', () => this.catch());
+        this.element.addEventListener('click', () => this.catch(this.isDecoy));
         
         // Touch
         this.element.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            this.catch();
+            this.catch(this.isDecoy);
         });
     }
 
@@ -51,9 +57,13 @@ class Snowflake {
         this.element.style.top = `${this.y}px`;
     }
 
-    catch() {
+    catch(isDecoy = false) {
         if (!gameActive) return;
-        increaseScore();
+        if (isDecoy) {
+            decreaseScore(5);
+        } else {
+            increaseScore();
+        }
         this.reset();
         successfulClicks++;
     }
@@ -122,6 +132,18 @@ const timerElement = document.getElementById('timer');
 function increaseScore() {
     score++;
     totalSnowflakesCaught++;
+    scoreElement.textContent = `Score: ${score}`;
+}
+
+function decreaseScore(amount) {
+    score -= amount;
+    totalSnowflakesCaught -= amount;
+    if (score < 0) {
+        score = 0;
+    }
+    if (totalSnowflakesCaught < 0) {
+        totalSnowflakesCaught = 0;
+    }
     scoreElement.textContent = `Score: ${score}`;
 }
 
