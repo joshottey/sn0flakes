@@ -12,10 +12,7 @@ class Snowflake {
         // Touch
         this.element.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            if (gameActive) {
-                successfulClicks++;
-                this.catch();
-            }
+            this.catch();
         });
     }
 
@@ -56,7 +53,15 @@ class Clock {
         this.element.className = 'clock';
         this.element.textContent = '⏰';
         this.reset();
+
+        // Mouse click
         this.element.addEventListener('click', () => this.catch());
+
+        // Touch
+        this.element.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.catch();
+        });
     }
 
     reset() {
@@ -229,23 +234,6 @@ gameLoop();
 
 // Add to existing event listeners in scripts.js
 document.addEventListener('DOMContentLoaded', () => {
-    // Add touch events to snowflakes
-    snowflakes.forEach(snowflake => {
-        snowflake.element.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            snowflake.catch();
-        });
-    });
-
-    // Add touch events to clock
-    clock.element.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        if (gameActive) {
-            successfulClicks++;
-            clock.catch();
-        }
-    });
-
     // Prevent scrolling while playing
     document.querySelector('.game-container').addEventListener('touchmove', (e) => {
         e.preventDefault();
@@ -318,6 +306,7 @@ document.querySelector('#game-area').addEventListener('click', () => {
 // Add touch handling to game area
 document.querySelector('#game-area').addEventListener('touchstart', (e) => {
     if (gameActive) {
+        e.preventDefault();
         totalClicks++;
     }
 }, { passive: false });
