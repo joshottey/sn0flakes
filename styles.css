@@ -3,8 +3,10 @@
     --secondary-blue: #0F4C75;
     --accent-blue: #3282B8;
     --light-blue: #BBE1FA;
+    --danger-red: #FF4C5B;
     --game-width: min(100vw, 512px);
     --game-height: min(100vh, 512px);
+    
 }
 
 body {
@@ -141,6 +143,10 @@ body {
     z-index: 200;
 }
 
+.time-bonus.negative {
+    color: var(--danger-red);
+}
+
 @keyframes fadeOut {
     0% {
         opacity: 1;
@@ -245,4 +251,35 @@ body {
     font-size: 0.85rem;
     opacity: 0.8;
     margin: 0.2rem 0;
+}
+
+.falling-snowman {
+    position: absolute;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1000;
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: auto;
+    /* Make container circular */
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    /* Animation */
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 76, 91, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(255, 0, 0, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+    }
 }

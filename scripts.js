@@ -1,3 +1,15 @@
+let score = 0;
+let gameActive = true;
+let timeLeft = 30;
+let totalSnowflakesCaught = 0;
+let totalBonusTimeCollected = 0;
+let totalClicks = 0;
+let successfulClicks = 0;
+const SNOWMAN_SPAWN_INTERVAL = 12000; // Adjustable: milliseconds between snowman spawns
+let activeSnowman = null;
+let snowmanInterval = null;
+const snowflakes = [];
+
 class Snowflake {
     constructor() {
         this.element = document.createElement('div');
@@ -31,7 +43,7 @@ class Snowflake {
         this.y += this.speed;
         this.x += this.drift;
         
-        if (this.y > 512) {
+        if (this.y > gameArea.offsetHeight) {
             this.reset();
         }
 
@@ -79,7 +91,7 @@ class Clock {
         this.y += this.speed;
         this.x += this.drift;
         
-        if (this.y > 512) {
+        if (this.y > gameArea.offsetHeight) {
             this.active = false;
             this.element.style.display = 'none';
         }
@@ -101,19 +113,11 @@ class Clock {
     }
 }
 
-let score = 0;
-let gameActive = true;
-let timeLeft = 30;
-let totalSnowflakesCaught = 0;
-let totalBonusTimeCollected = 0;
-let totalClicks = 0;
-let successfulClicks = 0;
 const scoreElement = document.getElementById('score');
 const gameArea = document.getElementById('game-area');
 const overlay = document.getElementById('overlay');
 const restartBtn = document.getElementById('restart-btn');
 const timerElement = document.getElementById('timer');
-const snowflakes = [];
 
 function increaseScore() {
     score++;
@@ -178,12 +182,22 @@ function resetGame() {
     overlay.classList.add('hidden');
     snowflakes.forEach(snowflake => snowflake.reset());
     updateSnowPiles();
+    if (snowmanInterval) {
+        clearInterval(snowmanInterval);
+    }
+    snowmanInterval = setInterval(spawnSnowman, SNOWMAN_SPAWN_INTERVAL);
 }
 
 function showTimeBonus(seconds) {
+    let absoluteSeconds = Math.abs(seconds);
     const bonusElement = document.createElement('div');
     bonusElement.className = 'time-bonus';
-    bonusElement.textContent = `+${seconds} seconds`;
+    if (seconds < 0) {
+        bonusElement.classList.add('negative');
+        bonusElement.textContent = `-${absoluteSeconds} seconds`;
+    } else {
+        bonusElement.textContent = `+${absoluteSeconds} seconds`;
+    }
     gameArea.appendChild(bonusElement);
     
     // Force reflow
@@ -240,6 +254,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: false });
 
     updateSnowPiles();
+
+    if (snowmanInterval) {
+        clearInterval(snowmanInterval);
+    }
+    snowmanInterval = setInterval(spawnSnowman, SNOWMAN_SPAWN_INTERVAL);
 });
 
 // Handle orientation changes
@@ -310,3 +329,76 @@ document.querySelector('#game-area').addEventListener('touchstart', (e) => {
         totalClicks++;
     }
 }, { passive: false });
+
+function spawnSnowman() {
+    // console.log('Attempting to spawn snowman...');
+    
+    if (!gameActive) {
+        // console.log('Game not active, skipping spawn');
+        return;
+    }
+    
+    if (activeSnowman) {
+        // console.log('Snowman already active, skipping spawn');
+        return;
+    }
+    
+    if (!gameArea) {
+        // console.error('Game area not found!');
+        return;
+    }
+
+    if (Math.random() > 0.5) {
+        // console.log('Failed to spawn snowman');
+        return;
+    }
+    
+    const snowman = document.createElement('div');
+    snowman.innerHTML = '⛄️';
+    snowman.className = 'falling-snowman';
+    snowman.style.left = Math.random() * (gameArea.offsetWidth - 30) + 'px';
+    snowman.style.top = '-30px';
+    snowman.style.position = 'absolute';
+    gameArea.appendChild(snowman);
+    activeSnowman = snowman;
+    
+    let posY = -30;
+    const fallSpeed = 6;
+    const fallInterval = setInterval(() => {
+        if (!gameActive) {
+            clearInterval(fallInterval);
+            if (snowman.parentNode) snowman.remove();
+            return;
+        }
+
+        posY += fallSpeed;
+        snowman.style.top = posY + 'px';
+
+        if (posY > gameArea.offsetHeight) {
+            applyPenalty();
+            clearInterval(fallInterval);
+            snowman.remove();
+            activeSnowman = null;
+        }
+    }, 16);
+
+    snowman.addEventListener('click', (e) => {
+        snowman.remove();
+        activeSnowman = null;
+        clearInterval(fallInterval);
+    });
+
+    snowman.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        snowman.remove();
+        activeSnowman = null;
+        clearInterval(fallInterval);
+    });
+}
+
+function applyPenalty() {
+    const penalties = [2, 5, 10];
+    const penalty = penalties[Math.floor(Math.random() * penalties.length)];
+    timeLeft -= penalty;
+    showTimeBonus(-penalty);
+}
