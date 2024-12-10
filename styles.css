@@ -283,3 +283,10 @@ body {
         box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
     }
 }
+
+/* Improve snowflake clickability on desktop */
+@media (min-width: 768px) {
+  .snowflake {
+    padding: 0.6em;
+  }
+}
