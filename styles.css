@@ -27,8 +27,8 @@ body {
     border: 2px solid var(--light-blue);
     border-radius: 8px;
     overflow: hidden;
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath fill='%23FF6B6B' d='M18,0 Q24,6 30,0 Q30,12 24,18 Q18,12 18,0'/%3E%3C/svg%3E") 24 0,
-        auto;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath fill='%23FF6B6B' d='M18,0 Q24,6 30,0 Q30,12 24,18 Q18,12 18,0'/%3E%3C/svg%3E") 24 0, auto;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ctext y='24' font-size='24'%3E👅%3C/text%3E%3C/svg%3E") 16 16, auto;
 }
 
 #score {
@@ -256,7 +256,6 @@ body {
 .falling-snowman {
     position: absolute;
     font-size: 24px;
-    cursor: pointer;
     z-index: 1000;
     user-select: none;
     -webkit-user-select: none;
@@ -287,6 +286,12 @@ body {
 /* Improve snowflake clickability on desktop */
 @media (min-width: 768px) {
   .snowflake {
-    padding: 0.6em;
+    padding: 0.7em;
+  }
+  .clock {
+    padding: 0.3em;
+  }
+  .falling-snowman {
+    padding: 0.2em;
   }
 }
